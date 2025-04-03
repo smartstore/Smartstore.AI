@@ -9,7 +9,7 @@
         <Company>SmartStore AG</Company>
         <Description>.NET client to interact with Google's Gemini API.</Description>
         <Copyright>Copyright © SmartStore AG</Copyright>
-        <PackageProjectUrl>https://smartstore.com/</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/smartstore/Smartstore.AI</PackageProjectUrl>
         <RepositoryUrl>https://github.com/smartstore/</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>AI;Gemini</PackageTags>
