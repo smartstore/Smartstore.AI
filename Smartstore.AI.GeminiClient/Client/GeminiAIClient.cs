@@ -1,11 +1,11 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.FileProviders;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.FileProviders;
 
 namespace Smartstore.AI.GeminiClient
 {
@@ -242,7 +242,7 @@ namespace Smartstore.AI.GeminiClient
             ArgumentNullException.ThrowIfNull(config);
 
             var url = $"{CreateBaseUrl(config, "files")}?key={config.ApiKey}";
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
             using var response = await _httpClient.SendAsync(request, cancelToken);
             await EnsureSuccess(null, response, cancelToken);
 
@@ -278,6 +278,52 @@ namespace Smartstore.AI.GeminiClient
                 using var response = await _httpClient.SendAsync(request, cancelToken);
                 await EnsureSuccess(null, response, cancelToken);
             }
+        }
+
+        /// <summary>
+        /// Gets a list of available models.
+        /// </summary>
+        /// <param name="config">API configuration data.</param>
+        /// <param name="pageSize">
+        /// The maximum number of Models to return (per page). If unspecified, 50 models will be returned per page.
+        /// This method returns at most 1000 models per page, even if you pass a larger <paramref name="pageSize"/>.
+        /// </param>
+        /// <param name="pageToken">
+        /// A page token, received from a previous models.list call. Provide the <paramref name="pageToken"/> 
+        /// returned by one request as an argument to the next request to retrieve the next page.
+        /// </param>
+        /// <exception cref="HttpRequestException"></exception>
+        public virtual async Task<GeminiModels> GetModelsAsync(
+            GeminiConfig config,
+            int pageSize = 0,
+            string? pageToken = null,
+            CancellationToken cancelToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(config);
+
+            var url = $"{CreateBaseUrl(config, "models")}?key={config.ApiKey}";
+            if (pageSize > 0)
+            {
+                url += $"&pageSize={pageSize}";
+            }
+            if (!string.IsNullOrWhiteSpace(pageToken))
+            {
+                url += $"&pageToken={Uri.EscapeDataString(pageToken)}";
+            }
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            using var response = await _httpClient.SendAsync(request, cancelToken);
+            await EnsureSuccess(null, response, cancelToken);
+
+            var rawContent = await response.Content.ReadAsStringAsync(cancelToken);
+            var models = JsonSerializer.Deserialize<GeminiModels>(rawContent, SerializerOptions);
+
+            if (models?.Models == null)
+            {
+                throw CreateException("The list of models is missing from the Gemini response.", null, rawContent);
+            }
+
+            return models;
         }
 
         protected static string CreateBaseUrl(GeminiConfig config, string? entity = null, string? method = null)
