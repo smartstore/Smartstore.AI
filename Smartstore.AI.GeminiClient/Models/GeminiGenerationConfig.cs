@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace Smartstore.AI.GeminiClient
+﻿namespace Smartstore.AI.GeminiClient
 {
     /// <summary>
     /// <see cref="https://ai.google.dev/api/generate-content#v1beta.GenerationConfig" />
@@ -35,9 +33,7 @@ namespace Smartstore.AI.GeminiClient
         public float? Temperature { get; set; }
 
         public float? TopP { get; set; }
-
         public int? TopK { get; set; }
-
         public int? Seed { get; set; }
 
         public bool? EnableEnhancedCivicAnswers { get; set; }
@@ -46,5 +42,16 @@ namespace Smartstore.AI.GeminiClient
         /// <see cref="https://ai.google.dev/api/generate-content#MediaResolution"/>
         /// </summary>
         public string? MediaResolution { get; set; }
+
+        /// <summary>
+        /// Config for image generation if supported by model.
+        /// <see cref="https://ai.google.dev/api/generate-content#ImageConfig"/>
+        /// </summary>
+        public GeminiImageConfig? ImageConfig { get; set; }
+    }
+
+    public class GeminiImageConfig
+    {
+        public string? AspectRatio { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace Smartstore.AI.GeminiClient
 {
-    public class GeminiAIClient(HttpClient httpClient)
+    public partial class GeminiAIClient(HttpClient httpClient)
     {
         const string DataPrefix = "data: ";
         const string StreamDoneSign = "[DONE]";
@@ -27,6 +27,8 @@ namespace Smartstore.AI.GeminiClient
         /// Gets the Gemini's default output token limit.
         /// </summary>
         public static int DefaultOutputTokenLimit => 8192;
+
+        #region Content generation
 
         /// <summary>
         /// Generates content like text output.
@@ -126,6 +128,10 @@ namespace Smartstore.AI.GeminiClient
             return null;
         }
 
+        #endregion
+
+        #region Imagen
+
         /// <summary>
         /// Generates images using Imagen.
         /// </summary>
@@ -161,6 +167,10 @@ namespace Smartstore.AI.GeminiClient
 
             return response;
         }
+
+        #endregion
+
+        #region File management
 
         /// <summary>
         /// Uploads a file to Gemini.
@@ -280,6 +290,10 @@ namespace Smartstore.AI.GeminiClient
             }
         }
 
+        #endregion
+
+        #region Misc
+
         /// <summary>
         /// Gets a list of available models.
         /// </summary>
@@ -325,6 +339,10 @@ namespace Smartstore.AI.GeminiClient
 
             return models;
         }
+
+        #endregion
+
+        #region Utilities
 
         protected static string CreateBaseUrl(GeminiConfig config, string? entity = null, string? method = null)
         {
@@ -374,5 +392,7 @@ namespace Smartstore.AI.GeminiClient
 
             return new(message, innerEx, response?.StatusCode);
         }
+
+        #endregion
     }
 }
