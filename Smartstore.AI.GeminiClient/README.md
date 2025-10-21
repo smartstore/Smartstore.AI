@@ -11,10 +11,11 @@ Key features include:
 - Flexibility: Adaptable to various .NET environments.
 
 ## Implemented features 
-- [x] Generate content (text and/or image input).
+- [x] Generate text or image content (including image input).
 - [x] Generate content as stream.
-- [x] Generate images using [Imagen](https://deepmind.google/technologies/imagen-3/).
+- [x] Generate images using [Imagen](https://deepmind.google/models/imagen/).
 - [x] File operations: Upload, get file list, delete file.
+- [x] Get list of available Gemini models.
 
 ## Quickstart
 Get a [Google Gemini API key](https://ai.google.dev/gemini-api/docs/api-key).
