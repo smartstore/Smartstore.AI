@@ -1,6 +1,7 @@
 ﻿## AI Gemini client
 
-![NuGet Version](https://img.shields.io/nuget/v/Smartstore.AI.GeminiClient) ![NuGet Downloads](https://img.shields.io/nuget/dt/Smartstore.AI.GeminiClient)
+[![NuGet Version](https://img.shields.io/nuget/v/Smartstore.AI.GeminiClient.svg)](https://www.nuget.org/packages/Smartstore.AI.GeminiClient)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Smartstore.AI.GeminiClient.svg)](https://www.nuget.org/packages/Smartstore.AI.GeminiClient)
 
 This project provides a .NET client library designed to facilitate interaction with the Gemini API. 
 It offers developers a streamlined approach to integrating Gemini's powerful AI capabilities into their .NET applications.
