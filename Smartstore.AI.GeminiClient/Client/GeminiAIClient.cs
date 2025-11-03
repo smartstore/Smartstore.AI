@@ -270,21 +270,23 @@ namespace Smartstore.AI.GeminiClient
         /// <summary>
         /// Deletes a Gemini hosted file.
         /// </summary>
+        /// <remarks>Files are automatically deleted after 48 hours.</remarks>
         /// <param name="config">API configuration data.</param>
-        /// <param name="fileName">Unique file name/ID, e.g. files/t1lue3159oa9.</param>
+        /// <param name="fileNameOrUrl">Unique file name/ID (e.g. files/t1lue3159oa9) or Gemini file URL.</param>
         /// <exception cref="HttpRequestException"></exception>
         public virtual async Task DeleteFileAsync(
             GeminiConfig config,
-            string fileName,
+            string fileNameOrUrl,
             CancellationToken cancelToken = default)
         {
             ArgumentNullException.ThrowIfNull(config);
 
-            if (!string.IsNullOrWhiteSpace(fileName))
+            if (!string.IsNullOrWhiteSpace(fileNameOrUrl))
             {
-                var url = $"{CreateBaseUrl(config)}{fileName}?key={config.ApiKey}";
-                var request = new HttpRequestMessage(HttpMethod.Delete, url);
+                var url = IsWebUrl(fileNameOrUrl) ? fileNameOrUrl : $"{CreateBaseUrl(config)}{fileNameOrUrl}";
+                url += (url.Contains('?') ? '&' : '?') + $"key={config.ApiKey}";
 
+                var request = new HttpRequestMessage(HttpMethod.Delete, url);
                 using var response = await _httpClient.SendAsync(request, cancelToken);
                 await EnsureSuccess(null, response, cancelToken);
             }
@@ -391,6 +393,24 @@ namespace Smartstore.AI.GeminiClient
                 : new Exception((requestJson ?? string.Empty) + Environment.NewLine + Environment.NewLine + (responseJson ?? string.Empty));
 
             return new(message, innerEx, response?.StatusCode);
+        }
+
+        protected static bool IsWebUrl(string? value, bool schemeIsOptional = false)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            value = value.Trim().ToLowerInvariant();
+
+            if (schemeIsOptional && value.StartsWith("//"))
+            {
+                value = "http:" + value;
+            }
+
+            return Uri.IsWellFormedUriString(value, UriKind.Absolute) &&
+                (value.StartsWith("http://") || value.StartsWith("https://") || value.StartsWith("ftp://"));
         }
 
         #endregion
