@@ -41,12 +41,15 @@ namespace Smartstore.AI.GeminiClient
         /// </summary>
         public string? AspectRatio { get; set; }
 
+        /// <summary>
+        /// 1K or 2K. 4K not supported.
+        /// Default: 1K.
+        /// </summary>
+        public string? SampleImageSize { get; set; }
+
         public ImagenGenerateImageOutputOptions? OutputOptions { get; set; }
 
-        /// <summary>
-        /// Contrary to the documentation, this property is not currently supported by the API.
-        /// Possible value: 'photograph', 'digital_art', 'landscape', 'sketch', 'watercolor', 'cyberpunk', 'pop_art'.
-        /// </summary>
+        [Obsolete("Removed from API. Use prompt instead.")]
         public string? SampleImageStyle { get; set; }
 
         public bool? AddWatermark { get; set; }

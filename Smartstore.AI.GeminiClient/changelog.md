@@ -1,5 +1,10 @@
 # Release Notes
 
+## Smartstore.AI.GeminiClient 1.0.3
+### Improvements
+
+- Added image size parameters for image generation requests.
+
 ## Smartstore.AI.GeminiClient 1.0.2
 ### Improvements
 

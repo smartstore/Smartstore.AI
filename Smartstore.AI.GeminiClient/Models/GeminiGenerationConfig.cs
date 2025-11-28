@@ -52,6 +52,16 @@
 
     public class GeminiImageConfig
     {
+        /// <summary>
+        /// 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9 or 21:9.
+        /// Default: 1:1.
+        /// </summary>
         public string? AspectRatio { get; set; }
+
+        /// <summary>
+        /// 1K, 2K or 4K. 4K not for all models.
+        /// Default: 1K.
+        /// </summary>
+        public string? ImageSize { get; set; }
     }
 }
