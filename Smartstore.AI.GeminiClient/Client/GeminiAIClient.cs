@@ -21,7 +21,7 @@ namespace Smartstore.AI.GeminiClient
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        private readonly HttpClient _httpClient = httpClient;
+        public readonly HttpClient HttpClient = httpClient;
 
         /// <summary>
         /// Gets the Gemini's default output token limit.
@@ -48,7 +48,7 @@ namespace Smartstore.AI.GeminiClient
             var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
             var url = $"{CreateBaseUrl(config, "models")}{config.ModelName}:generateContent?key={config.ApiKey}";
 
-            using var message = await _httpClient.PostAsync(url, content, cancelToken);
+            using var message = await HttpClient.PostAsync(url, content, cancelToken);
             await EnsureSuccess(json, message, cancelToken);
 
             var rawContent = await message.Content.ReadAsStringAsync(cancelToken);
@@ -85,7 +85,7 @@ namespace Smartstore.AI.GeminiClient
             var url = $"{CreateBaseUrl(config, "models")}{config.ModelName}:streamGenerateContent?key={config.ApiKey}&alt=sse";
 
             using var requestMessage = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
-            using var message = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancelToken);
+            using var message = await HttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancelToken);
             await EnsureSuccess(json, message, cancelToken);
 
             var stream = await message.Content.ReadAsStreamAsync(cancelToken);
@@ -154,7 +154,7 @@ namespace Smartstore.AI.GeminiClient
             var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
             var url = $"{CreateBaseUrl(config, "models")}{config.ModelName}:predict?key={config.ApiKey}";
 
-            using var message = await _httpClient.PostAsync(url, content, cancelToken);
+            using var message = await HttpClient.PostAsync(url, content, cancelToken);
             await EnsureSuccess(json, message, cancelToken);
 
             var rawContent = await message.Content.ReadAsStringAsync(cancelToken);
@@ -208,7 +208,7 @@ namespace Smartstore.AI.GeminiClient
             initRequest.Headers.Add("X-Goog-Upload-Header-Content-Length", file.Length.ToString());
             initRequest.Headers.Add("X-Goog-Upload-Header-Content-Type", mimeType);
 
-            using var initiateResponse = await _httpClient.SendAsync(initRequest, cancelToken);
+            using var initiateResponse = await HttpClient.SendAsync(initRequest, cancelToken);
             await EnsureSuccess(json, initiateResponse, cancelToken);
 
             // Upload file.
@@ -228,7 +228,7 @@ namespace Smartstore.AI.GeminiClient
             uploadRequest.Headers.Add("X-Goog-Upload-Command", "upload, finalize");
             uploadRequest.Headers.Add("X-Goog-Upload-Offset", "0");
 
-            using var uploadResponse = await _httpClient.SendAsync(uploadRequest, cancelToken);
+            using var uploadResponse = await HttpClient.SendAsync(uploadRequest, cancelToken);
             await EnsureSuccess(null, uploadResponse, cancelToken);
 
             var rawContent = await uploadResponse.Content.ReadAsStringAsync(cancelToken);
@@ -253,7 +253,7 @@ namespace Smartstore.AI.GeminiClient
 
             var url = $"{CreateBaseUrl(config, "files")}?key={config.ApiKey}";
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            using var response = await _httpClient.SendAsync(request, cancelToken);
+            using var response = await HttpClient.SendAsync(request, cancelToken);
             await EnsureSuccess(null, response, cancelToken);
 
             var rawContent = await response.Content.ReadAsStringAsync(cancelToken);
@@ -287,7 +287,7 @@ namespace Smartstore.AI.GeminiClient
                 url += (url.Contains('?') ? '&' : '?') + $"key={config.ApiKey}";
 
                 var request = new HttpRequestMessage(HttpMethod.Delete, url);
-                using var response = await _httpClient.SendAsync(request, cancelToken);
+                using var response = await HttpClient.SendAsync(request, cancelToken);
                 await EnsureSuccess(null, response, cancelToken);
             }
         }
@@ -328,7 +328,7 @@ namespace Smartstore.AI.GeminiClient
             }
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            using var response = await _httpClient.SendAsync(request, cancelToken);
+            using var response = await HttpClient.SendAsync(request, cancelToken);
             await EnsureSuccess(null, response, cancelToken);
 
             var rawContent = await response.Content.ReadAsStringAsync(cancelToken);
