@@ -13,7 +13,7 @@
         /// <summary>
         /// Ordered parts that constitute a single message. Parts may have different MIME types.
         /// </summary>
-        public required List<GeminiPart> Parts { get; set; }
+        public List<GeminiPart> Parts { get; set; } = [];
 
         public override string ToString()
             => $"{Role ?? "-"}: {string.Join(", ", Parts.Select(x => x.Text))}";

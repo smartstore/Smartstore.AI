@@ -1,5 +1,9 @@
 # Release Notes
 
+## Smartstore.AI.GeminiClient 1.0.5
+### Bugfixes
+- Fixed "JSON deserialization for type 'Smartstore.AI.GeminiClient.GeminiContent' was missing required properties including: 'parts'."
+
 ## Smartstore.AI.GeminiClient 1.0.4
 ### Improvements
 - Make the underlying HTTP client accessible via a property.
