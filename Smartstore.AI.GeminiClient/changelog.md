@@ -1,5 +1,9 @@
 # Release Notes
 
+## Smartstore.AI.GeminiClient 1.0.7
+### Improvements
+- .Net11 migration.
+
 ## Smartstore.AI.GeminiClient 1.0.6
 ### Improvements
 - Support .Net10 as target framework.
